@@ -28,7 +28,7 @@
         </tr>
         {% for booklist in booklist %}
         <tr>
-        <td> {{ booklist.title}} </td>
+        <td> <a href="{{ url_for('bookdetail', id=booklist.id) }}">{{ booklist.title}} </td>
         <td> {{ booklist.author}} </td>
         <td> {{ booklist.isbn}} </td>
         <td> {{ booklist.year}} </td>

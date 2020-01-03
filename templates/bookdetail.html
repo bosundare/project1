@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Books Website
+{% endblock %}
+
+{% block body %}
+    <h1>Book Details</h1>
+
+    <h1>Books</h1>
+
+    <ul>
+        <li>Book Title: {{ booksid.title }}</li>
+        <li>Author: {{ booksid.author }}</li>
+        <li>ISBN: {{ booksid.isbn}} </li>
+        <li>Book Year: {{ booksid.year}} </li>
+    </ul>
+{% endblock %}

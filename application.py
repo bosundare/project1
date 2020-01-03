@@ -64,7 +64,15 @@ def booksearch():
         return render_template("booksearch.html", message="Click on a Book Title to view more information", booklist = booklisted, username = username)
     return render_template("index.html", message="You are not logged in. Log in to view books")
 
-@app.route("/logout")
+@app.route("/bookdetail/<int:id>")
+def bookdetail(id):
+    if 'username' in session:
+        booksid = db.execute("SELECT * FROM books WHERE ID = :id", {"id": id}).fetchone()
+        return render_template("bookdetail.html", booksid=booksid)
+    return render_template("index.html", message="You are not logged in. Log in to view books")
+
+
+@app.route("/logout", methods=["GET"])
 def logout():
    # remove the username from the session if it is there
    session.pop('username', None)
