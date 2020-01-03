@@ -4,7 +4,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-engine = create_engine('postgresql://nvuzmytodgzcae:c4907caa27275feb3ec78f5ced580ba370cd94f26f5f16a28f40051f7f81ac8d@ec2-54-163-234-44.compute-1.amazonaws.com:5432/df6ljihfevamaa')
+engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
 def main():
