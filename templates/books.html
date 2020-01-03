@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Books Website
+{% endblock %}
+
+{% block body %}
+    <h1>Welcome to our Books Portal</h1>
+
+    <div class="login-wrap">
+	<div class="login-html">
+
+    <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Search for a book</label>
+
+		<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
+    <div class="login-form">
+      <form action="{{ url_for('booksearch') }}" method="post">
+      <div class="sign-in-htm">
+        <div class="group">
+          <label for="user" class="label">Enter Book ISBN, Author, Title</label>
+          <input id="user" name="searchbook" type="text" class="input">
+        </div>
+
+        <div class="group">
+          <input type="submit" class="button" value="Search">
+        </div>
+        {{ message }}
+        <div class="hr"></div>
+      </div>
+      </form>
+
+
+    </div>
+
+
+	</div>
+</div>
+{% endblock %}
