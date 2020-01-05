@@ -1,6 +1,7 @@
 import os
+import requests
 
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -68,7 +69,13 @@ def booksearch():
 def bookdetail(id):
     if 'username' in session:
         booksid = db.execute("SELECT * FROM books WHERE ID = :id", {"id": id}).fetchone()
-        return render_template("bookdetail.html", booksid=booksid)
+        res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "qa7Aig5ZhQ8P58vHDI8Q", "isbns": booksid.isbn})
+        data = res.json()
+        bookdict = data["books"][0]
+        average_rating = bookdict['average_rating']
+        number_rating = bookdict['work_ratings_count']
+
+        return render_template("bookdetail.html", booksid=booksid, average_rating=average_rating, number_rating=number_rating)
     return render_template("index.html", message="You are not logged in. Log in to view books")
 
 
@@ -77,3 +84,24 @@ def logout():
    # remove the username from the session if it is there
    session.pop('username', None)
    return render_template("index.html", message="You have successfully logged out")
+
+@app.route("/api/<isbn>", methods=["GET"])
+def books_api(isbn):
+    booksid = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+    if booksid is None:
+        return jsonify({"error": "Invalid ISBN"}), 422
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "qa7Aig5ZhQ8P58vHDI8Q", "isbns": booksid.isbn})
+    data = res.json()
+    bookdict = data["books"][0]
+    average_rating = bookdict['average_rating']
+    review_count = bookdict['work_reviews_count']
+
+    return jsonify({
+            "title": booksid.title,
+            "author": booksid.author,
+            "year": booksid.year,
+            "isbn": booksid.isbn,
+            "review_count": review_count,
+            "average_score": average_rating
+            }
+        )
