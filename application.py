@@ -46,6 +46,7 @@ def login():
         return render_template("index.html", message="Wrong Username or Password. Enter Valid Information")
 
     session['username'] = username
+
     return render_template("booksearch.html", username = username)
 
 # @app.route("/books", methods=["GET", "POST"])
